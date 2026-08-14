@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.vite/
+pnpm-lock.yaml
+
+# Docs are written deliberately; do not auto-reformat.
+docs/
+README.md

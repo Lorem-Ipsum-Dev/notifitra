@@ -147,6 +147,13 @@ notifitra/
 - **Node:** 20.x LTS pinned via `.nvmrc` and `engines` (both files created in `chore/repo-scaffold`).
 - **Formatting/linting:** Prettier + ESLint with a shared root config applied to all workspaces (created in `chore/repo-scaffold`).
 
+### 4.1 Dev runner (`chore/repo-scaffold`)
+
+- **Chosen:** `tsup` (one-shot build) + `node dist/index.js`, orchestrated by a small root script `scripts/dev.mjs` that polls `src/` mtimes and restarts the process on change. `pnpm dev` runs API + worker; `pnpm --filter @notifitra/<app> dev` runs one app.
+- **Why:** `tsx`'s runtime loader and `concurrently` hang on this repo's WSL `/mnt/d` (drvfs) mount — the repo's primary dev machine — while one-shot `tsup` builds and plain `node` run reliably there. A polling orchestrator (instead of `--watch`) avoids fs-watch/inotify, which also does not fire reliably on drvfs.
+- **Trade-offs:** `scripts/dev.mjs` is hand-rolled (~140 lines) rather than off-the-shelf `concurrently`/`tsx watch`; polling adds ~300ms latency to reload detection.
+- **Revisit:** on a filesystem where `tsx`/`concurrently`/`--watch` work (e.g., CI, native Linux), standardizing on `tsx watch` + `concurrently` is a clean swap — the per-app `dev` scripts already go through the orchestrator, so only `scripts/dev.mjs` + the scripts map change.
+
 ---
 
 ## 5. Standing constraints

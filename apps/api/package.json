@@ -1,0 +1,23 @@
+{
+  "name": "@notifitra/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Notifitra REST API (Hono)",
+  "type": "module",
+  "scripts": {
+    "dev": "node ../../scripts/dev.mjs api",
+    "build": "tsup src/index.ts --format esm --clean",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "@notifitra/shared": "workspace:*",
+    "hono": "^4.6.14"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}
